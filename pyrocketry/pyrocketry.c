@@ -1,18 +1,18 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include "equations.h"
-
-PyDoc_STRVAR(pyrocketry_doc, "Python module for rocket equations.");
-PyDoc_STRVAR(pyrocketry_Tre_doc, "Tsiolkovsky rocket equation.");
-PyDoc_STRVAR(pyrocketry_suicide_burn_heigh_doc, "Suicide burn height calculation.");
+#include "doc.h"
 
 static PyObject *PyrocketryError;
 
+/**
+ * @brief Tsiolkovsky rocket equation function
+ */
 static PyObject *pr_Tre(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     double Isp = 0.0;   /* the specific impulse in dimension of time */
     double Mo = 0.0;    /* the initial total mass, including propellant, a.k.a. wet mass */
-    double Mf = 0.0;    /* he final total mass without propellant, a.k.a. dry mass */
+    double Mf = 0.0;    /* the final total mass without propellant, a.k.a. dry mass */
     double g = 9.80665; /* g - is an optional kwarg */
     double result;
 
@@ -40,6 +40,9 @@ static PyObject *pr_Tre(PyObject *self, PyObject *args, PyObject *kwargs)
     return Py_BuildValue("d", result);
 };
 
+/**
+ * @brief Suicide burn height calculation function
+ */
 static PyObject *pr_suicide_burn_height(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     double Vz = 0.0;    /* vertical velocity */
@@ -67,12 +70,18 @@ static PyObject *pr_suicide_burn_height(PyObject *self, PyObject *args, PyObject
     return Py_BuildValue("d", result);
 };
 
+/**
+ * @brief Define pyrocketry methods
+ */
 static PyMethodDef PyrocketryMethods[] = {
     {"Tre", (PyCFunction)pr_Tre, METH_VARARGS | METH_KEYWORDS, pyrocketry_Tre_doc},
     {"suicide_burn_height", (PyCFunction)pr_suicide_burn_height, METH_VARARGS | METH_KEYWORDS, pyrocketry_suicide_burn_heigh_doc},
     {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
+/**
+ * @brief Define pyrocketry
+ */
 static struct PyModuleDef pyrocketrymodule = {
     PyModuleDef_HEAD_INIT,
     "pyrocketry",   /* name of the module */
